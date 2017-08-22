@@ -16,4 +16,4 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000; // use whatever port heroku attempting to provide or just use port 5000
 // watch for any trafic coming in from port 5000
-app.listen(5000);
+app.listen(PORT);
