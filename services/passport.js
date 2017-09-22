@@ -26,20 +26,15 @@ passport.use(
       callbackURL: '/auth/google/callback',
       proxy: true
     },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleId: profile.id }).then(existingUser => {
-        if (existingUser) {
-          // we already have a reacord with the given profile ID
-          // The done() is to tell passport that we have finished creating a user and it should now resume the auth process
-          done(null, existingUser);
-        } else {
-          // we don't have a user record with this ID, make a new record
-          // Create a new instance of the user, still inside the Javascript api => need .save()
-          new User({ googleId: profile.id })
-            .save()
-            .then(user => done(null, user));
-        }
-      });
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id });
+
+      if (existingUser) {
+        return done(null, existingUser);
+      }
+
+      const user = await new User({ googleId: profile.id }).save();
+      done(null, user);
     }
   )
 );

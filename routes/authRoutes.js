@@ -10,17 +10,24 @@ module.exports = app => {
     })
   );
 
-  app.get('/auth/google/callback', passport.authenticate('google'));
+  app.get(
+    '/auth/google/callback',
+    passport.authenticate('google'),
+    (req, res) => {
+      res.redirect('/surveys');
+    }
+  );
 
   app.get('/api/logout', (req, res) => {
     req.logout();
-    res.send(req.user);
+    res.redirect('/');  // redirect to the root route of the application
   });
 
   app.get('/api/current_user', (req, res) => {
     res.send(req.user); // send back to the user
   });
 };
+
 
 // app = express App to register this route handler with
 // get = Watch for incoming request with this method
