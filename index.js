@@ -6,6 +6,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser');  // Parse in incoming request bodeis in a middleware before your handlers
 const keys = require('./config/keys');
 require('./models/User');
+require('./models/Survey'); // require in the surveySchema
 require('./services/passport');
 
 // connect to Mongo
@@ -26,8 +27,11 @@ app.use(passport.session());
 
 
 // it turns into a function and immediately calls the express app function
+// Below are all the routes handlers
+// call in the route function and then immediately call that route function with that app object
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   // Express will serve up production assets
